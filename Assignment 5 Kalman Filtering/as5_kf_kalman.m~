@@ -30,8 +30,6 @@ function [MArray, xPrioriArray, xPosterioArray, pPosterioArray] = as5_kf_kalman(
 
 %% 1) Define Matrices needed for Kalman Filter
 
-Q = params.Q;
-R = params.R;
 
 
 %% 2) Preallocation (reserving space) of matrices to speed up calculations
