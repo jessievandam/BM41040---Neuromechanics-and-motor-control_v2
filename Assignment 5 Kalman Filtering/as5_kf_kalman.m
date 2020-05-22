@@ -30,15 +30,23 @@ function [MArray, xPrioriArray, xPosterioArray, pPosterioArray] = as5_kf_kalman(
 
 %% 1) Define Matrices needed for Kalman Filter
 
-Q = params.Q;
-R = params.R;
+
+
+
 A = ForwardModel.A;
 B = ForwardModel.B;
 C = ForwardModel.C;
+N = size(A,1);
+U = size(B,2);
+O = size(C,1);
+NN = size(C,2);
+Q = [params.Q zeros(O,NN-2);
+    zeros(NN-2,NN)];
+R = params.R;
 u = data.u;
-P0 = zeros(2,2);
-x0 = zeros(2,1);
-u0 = u(1,1);
+P0 = zeros(N,N);
+x0 = zeros(N,1);
+u0 = u(1,:);
 Z = data.yNoise;
 %% 2) Preallocation (reserving space) of matrices to speed up calculations
 
@@ -48,11 +56,11 @@ Z = data.yNoise;
 % pPosterioArray = zeros(2,2,length(u));
 % pPrioriArray = zeros(2,2,length(u));
 
-MArray = zeros(length(u),2,2);
-xPrioriArray = zeros(length(u),2);
-xPosterioArray = zeros(length(u),2);
-pPosterioArray = zeros(length(u),2,2);
-pPrioriArray = zeros(length(u),2,2);
+MArray = zeros(length(u),N,O);
+xPrioriArray = zeros(length(u),N);
+xPosterioArray = zeros(length(u),N);
+pPosterioArray = zeros(length(u),N,N);
+pPrioriArray = zeros(length(u),N,N);
 
 
 %% 3) Initialize Covariance and State Estimates
