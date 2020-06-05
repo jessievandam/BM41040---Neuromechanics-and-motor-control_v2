@@ -65,24 +65,13 @@ pPrioriArray = zeros(length(u),N,N);
 
 %% 3) Initialize Covariance and State Estimates
 
-% xPrioriArray(:,1) = A*x0+B*u0;
-% pPrioriArray(:,:,1) = A*P0*A.'+Q;
-
 xPrioriArray(1,:) = A*x0+B*u0;
 pPriori = A*P0*A.'+Q;
 pPrioriArray(1,:,:) = pPriori;
 
 %% 4) Run the Kalman Filter
 
-% for i = 1:(length(u)-1)
-%     MArray(:,:,i) = pPrioriArray(:,:,i)*C.'*(C*pPrioriArray(:,:,i)*C.'+R).^(-1);
-%     xPosterioArray(:,i) = xPrioriArray(:,i)+MArray(:,:,i)*(Z(:,i)-C*xPrioriArray(:,i));
-%     pPosterioArray(:,:,i) = pPrioriArray(:,:,i)-MArray(:,:,i)*C*pPrioriArray(:,:,1);
-%     
-%     xPrioriArray(:,i+1) = A*xPosterioArray(:,i)+B*u(:,i);
-%     pPrioriArray(:,:,i+1) = A*pPosterioArray(:,:,i)*A.'+Q;
-% end
-% 
+
 for i = 1:(length(u)-1)
     M = pPriori*C.'/(C*pPriori*C.'+R);
     MArray(i,:,:) = M;
@@ -95,7 +84,3 @@ for i = 1:(length(u)-1)
     pPrioriArray(i+1,:,:) = pPriori;
 end
 
-% xPosterioArray = xPosterioArray.';
-% xPrioriArray = xPrioriArray.';
-% MArray = permute(MArray,[3 1 2]);
-% pPosterioArray = permute(pPosterioArray,[3 1 2]);
